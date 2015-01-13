@@ -86,13 +86,11 @@
 -opaque recordset() :: #recordset{}.
 -type cmp_fun() :: {fun((term(), term()) -> boolean())}.
 -type option() :: {atom(), term()}.
--type op() :: statebox:op().
 
 -export([new/2, new/3]).
 -export([from_list/2, from_list/4, to_list/1]).
 -export([is_recordset/1, size/1, max_size/1]).
 -export([add/2, delete/2]).
--export([statebox_add/1, statebox_delete/1]).
 
 %% @equiv new(IdentityFun, SortFun, [])
 -spec new(cmp_fun(), cmp_fun()) -> recordset().
@@ -232,17 +230,3 @@ delete_1(Term, IdentityFun, [H | Set]) ->
         false ->
             [H | delete_1(Term, IdentityFun, Set)]
     end.
-
-
-%% @doc Return a <code>statebox:op()</code> which will add the given
-%%      <code>Term</code> to a <code>recordset</code>.
--spec statebox_add(term()) -> op().
-statebox_add(Term) ->
-    {fun ?MODULE:add/2, [Term]}.
-
-
-%% @doc Return a <code>statebox:op()</code> which will delete the given
-%%      <code>Term</code> from a <code>recordset</code>.
--spec statebox_delete(term()) -> op().
-statebox_delete(Term) ->
-    {fun ?MODULE:delete/2, [Term]}.
